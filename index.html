@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipment Plan For Export - Manage Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f9;
+        }
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .header-blue {
+            background-color: #f0f9ff;
+        }
+        /* เงื่อนไขสีพื้นหลังตามวัน */
+        .bg-day-white { background-color: #ffffff; }
+        .bg-day-blue { background-color: #e6f4fa; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+            padding: 12px 8px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        td {
+            padding: 10px 8px;
+            border: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+        .section-title {
+            background-color: #ffffff;
+            padding: 12px 16px;
+            font-weight: bold;
+            border-bottom: 2px solid #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .btn-action {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        .status-active { color: #10b981; }
+        .text-country { color: #2563eb; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div class="p-6">
+    <!-- Breadcrumb & Title -->
+    <div class="mb-6">
+        <h1 class="text-xl font-bold text-slate-800">แผนสำหรับส่งออก : จัดการข้อมูล</h1>
+        <div class="flex gap-2 mt-2">
+            <select class="border p-1 rounded text-sm"><option>ปี 2025</option></select>
+            <select class="border p-1 rounded text-sm"><option>เดือน มกราคม</option></select>
+            <button class="bg-sky-500 text-white px-4 py-1 rounded text-sm">ค้นหา</button>
+        </div>
+    </div>
+
+    <!-- Section 1: แผนจัดส่งสินค้ารายสัปดาห์ - เปิดใช้งาน -->
+    <div class="table-container">
+        <div class="section-title">
+            <span class="text-blue-700">● แผนจัดส่งสินค้ารายสัปดาห์ - เปิดใช้งาน</span>
+            <div class="flex gap-2">
+                <button class="bg-sky-500 text-white btn-action">+ เพิ่ม</button>
+                <button class="bg-amber-500 text-white btn-action">แก้ไข</button>
+                <button class="bg-red-500 text-white btn-action">ยกเลิก</button>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2" width="40">เลือก</th>
+                    <th rowspan="2">สัปดาห์</th>
+                    <th rowspan="2">ลูกค้า</th>
+                    <th colspan="2">ETD (KKF)</th>
+                    <th colspan="2">การจองขนส่ง</th>
+                    <th rowspan="2">รถบรรทุก</th>
+                </tr>
+                <tr>
+                    <th>วัน</th>
+                    <th>วันที่</th>
+                    <th>ตู้คอนเทนเนอร์</th>
+                    <th class="bg-yellow-50">ท่าเรือปลายทาง (ประเทศ)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- วันจันทร์ - สีขาว -->
+                <tr class="bg-day-white">
+                    <td align="center"><input type="checkbox"></td>
+                    <td>W2 (6 - 12)</td>
+                    <td>A0201 : SOON HUAT SENG SDN BHD (MY01)</td>
+                    <td align="center">จันทร์</td>
+                    <td align="center">21/01/2025</td>
+                    <td align="center">20'</td>
+                    <td>MY01D : PADANG BESAR, <span class="text-country">MALAYSIA</span></td>
+                    <td align="center">1</td>
+                </tr>
+                <!-- วันอังคาร - สีฟ้าอ่อน -->
+                <tr class="bg-day-blue">
+                    <td align="center"><input type="checkbox"></td>
+                    <td>W4 (20 - 26)</td>
+                    <td>F0614 : FULLY (S) PTE LTD (GH02)</td>
+                    <td align="center">อังคาร</td>
+                    <td align="center">22/01/2025</td>
+                    <td align="center">40'</td>
+                    <td>GH01D : TEMA, <span class="text-country">GHANA</span></td>
+                    <td align="center">2</td>
+                </tr>
+                <!-- วันพุธ - สีขาว -->
+                <tr class="bg-day-white">
+                    <td align="center"><input type="checkbox"></td>
+                    <td>W4 (20 - 26)</td>
+                    <td>E0605 : EURO RED VIGO, S.L. (ES01)</td>
+                    <td align="center">พุธ</td>
+                    <td align="center">23/01/2025</td>
+                    <td align="center">20'</td>
+                    <td>ES02D : VIGO, <span class="text-country">SPAIN</span></td>
+                    <td align="center">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Section 2: แผนจัดส่งสินค้ารายสัปดาห์ - รอยืนยัน -->
+    <div class="table-container">
+        <div class="section-title">
+            <span class="text-amber-600">● แผนจัดส่งสินค้ารายสัปดาห์ - รอยืนยัน</span>
+            <div class="flex gap-2">
+                <button class="bg-green-600 text-white btn-action">ยืนยัน</button>
+                <button class="bg-red-500 text-white btn-action">ส่งคืน</button>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2" width="40">เลือก</th>
+                    <th rowspan="2">สัปดาห์</th>
+                    <th rowspan="2">ลูกค้า</th>
+                    <th colspan="2">ETD (KKF)</th>
+                    <th colspan="2">การจองขนส่ง</th>
+                    <th rowspan="2">รถบรรทุก</th>
+                </tr>
+                <tr>
+                    <th>วัน</th>
+                    <th>วันที่</th>
+                    <th>ตู้คอนเทนเนอร์</th>
+                    <th class="bg-yellow-50">ท่าเรือปลายทาง (ประเทศ)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- วันพฤหัสบดี - สีฟ้าอ่อน -->
+                <tr class="bg-day-blue">
+                    <td align="center"><input type="checkbox"></td>
+                    <td>W2 (6 - 12)</td>
+                    <td>A0203 : CHYE KHIANG SENG(M) SDN BHD (MY02)</td>
+                    <td align="center">พฤหัสบดี</td>
+                    <td align="center">24/01/2025</td>
+                    <td align="center">20'</td>
+                    <td>MY02D : PORT KLANG, <span class="text-country">MALAYSIA</span></td>
+                    <td align="center">1</td>
+                </tr>
+                <!-- วันศุกร์ - สีขาว -->
+                <tr class="bg-day-white">
+                    <td align="center"><input type="checkbox"></td>
+                    <td>W2 (6 - 12)</td>
+                    <td>A4001 : BECAMEX TRADING CO., LTD (VN01)</td>
+                    <td align="center">ศุกร์</td>
+                    <td align="center">25/01/2025</td>
+                    <td align="center">20'</td>
+                    <td>VN01D : HOCHIMINH (CATLAI), <span class="text-country">VIETNAM</span></td>
+                    <td align="center">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Legend (คำอธิบายสี) -->
+    <div class="flex gap-6 mt-4 p-4 bg-white rounded border text-sm">
+        <div class="flex items-center gap-2">
+            <div class="w-4 h-4 border bg-day-white"></div>
+            <span>สำหรับวันจันทร์, พุธ, ศุกร์</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <div class="w-4 h-4 border bg-day-blue"></div>
+            <span>สำหรับวันอังคาร, พฤหัสบดี, เสาร์</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
