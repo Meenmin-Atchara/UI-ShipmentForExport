@@ -9,6 +9,12 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7f9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content {
+            flex: 1;
         }
         .table-container {
             background: white;
@@ -62,49 +68,70 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5);
-            z-index: 50;
+            z-index: 100;
             justify-content: center;
             align-items: center;
         }
         .modal-content {
             background: white;
-            width: 90%;
-            max-width: 800px;
+            width: 95%;
+            max-width: 850px;
             max-height: 90vh;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow-y: auto;
             position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
         .form-group { margin-bottom: 1rem; }
-        label { display: block; font-size: 12px; color: #64748b; margin-bottom: 4px; }
+        label { display: block; font-size: 12px; color: #64748b; margin-bottom: 4px; font-weight: 500; }
         label.required::after { content: " *"; color: #ef4444; }
         input, select, textarea {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #cbd5e1;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            ring: 2px ring-blue-100;
         }
         .customer-card {
-            border: 1px dashed #cbd5e1;
-            padding: 1rem;
-            border-radius: 6px;
-            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1.25rem;
             background: #f8fafc;
+            position: relative;
+        }
+        .customer-card-extra {
+            background-color: #fffbeb; /* สีเหลืองอ่อนสำหรับลูกค้าเพิ่ม */
+            border: 1px dashed #f59e0b;
+        }
+        
+        footer {
+            background: white;
+            padding: 1rem;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.875rem;
+            border-top: 1px solid #e2e8f0;
         }
     </style>
 </head>
 <body>
 
-<div class="p-6">
+<div class="main-content p-6">
     <!-- Breadcrumb & Title -->
     <div class="mb-6 flex justify-between items-center">
         <div>
-            <h1 class="text-xl font-bold text-slate-800">แผนสำหรับส่งออก : จัดการข้อมูล</h1>
+            <h1 class="text-2xl font-bold text-slate-800">แผนสำหรับส่งออก : จัดการข้อมูล</h1>
             <div class="flex gap-2 mt-2">
-                <select class="border p-1 rounded text-sm w-32"><option>ปี 2025</option></select>
-                <select class="border p-1 rounded text-sm w-32"><option>เดือน มกราคม</option></select>
-                <button class="bg-sky-500 text-white px-4 py-1 rounded text-sm hover:bg-sky-600">ค้นหา</button>
+                <select class="border p-2 rounded text-sm w-40 bg-white"><option>ปี 2025</option></select>
+                <select class="border p-2 rounded text-sm w-40 bg-white"><option>เดือน มกราคม</option></select>
+                <button class="bg-sky-500 text-white px-6 py-2 rounded text-sm hover:bg-sky-600 font-medium transition shadow-sm">ค้นหา</button>
             </div>
         </div>
     </div>
@@ -112,192 +139,241 @@
     <!-- Section 1: แผนจัดส่งสินค้ารายสัปดาห์ - เปิดใช้งาน -->
     <div class="table-container">
         <div class="section-title">
-            <span class="text-blue-700">● แผนจัดส่งสินค้ารายสัปดาห์ - เปิดใช้งาน</span>
+            <span class="text-blue-700 flex items-center gap-2">
+                <span class="w-3 h-3 bg-blue-600 rounded-full"></span>
+                แผนจัดส่งสินค้ารายสัปดาห์ - เปิดใช้งาน
+            </span>
             <div class="flex gap-2">
-                <button onclick="openModal()" class="bg-sky-500 text-white btn-action shadow-sm hover:bg-sky-600">+ เพิ่ม</button>
+                <button onclick="openModal()" class="bg-sky-500 text-white btn-action shadow-sm hover:bg-sky-600 flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                    เพิ่ม
+                </button>
                 <button class="bg-amber-500 text-white btn-action shadow-sm hover:bg-amber-600">แก้ไข</button>
                 <button class="bg-red-500 text-white btn-action shadow-sm hover:bg-red-600">ยกเลิก</button>
             </div>
         </div>
-        <table>
-            <thead>
-                <tr>
-                    <th rowspan="2" width="40">เลือก</th>
-                    <th rowspan="2">สัปดาห์</th>
-                    <th rowspan="2">ลูกค้า</th>
-                    <th colspan="2">ETD (KKF)</th>
-                    <th colspan="2">การจองขนส่ง</th>
-                    <th rowspan="2">รถบรรทุก</th>
-                </tr>
-                <tr>
-                    <th>วัน</th>
-                    <th>วันที่</th>
-                    <th>ตู้คอนเทนเนอร์</th>
-                    <th class="bg-yellow-50">ท่าเรือปลายทาง (ประเทศ)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- ข้อมูลตัวอย่างเดิม -->
-                <tr class="bg-day-white">
-                    <td align="center"><input type="checkbox"></td>
-                    <td>W2 (6 - 12)</td>
-                    <td>A0201 : SOON HUAT SENG SDN BHD (MY01)</td>
-                    <td align="center">จันทร์</td>
-                    <td align="center">21/01/2025</td>
-                    <td align="center">20'</td>
-                    <td>MY01D : PADANG BESAR, <span class="text-country">MALAYSIA</span></td>
-                    <td align="center">1</td>
-                </tr>
-                <tr class="bg-day-blue">
-                    <td align="center"><input type="checkbox"></td>
-                    <td>W4 (20 - 26)</td>
-                    <td>F0614 : FULLY (S) PTE LTD (GH02)</td>
-                    <td align="center">อังคาร</td>
-                    <td align="center">22/01/2025</td>
-                    <td align="center">40'</td>
-                    <td>GH01D : TEMA, <span class="text-country">GHANA</span></td>
-                    <td align="center">2</td>
-                </tr>
-                <tr class="bg-day-white">
-                    <td align="center"><input type="checkbox"></td>
-                    <td>W4 (20 - 26)</td>
-                    <td>E0605 : EURO RED VIGO, S.L. (ES01)</td>
-                    <td align="center">พุธ</td>
-                    <td align="center">23/01/2025</td>
-                    <td align="center">20'</td>
-                    <td>ES02D : VIGO, <span class="text-country">SPAIN</span></td>
-                    <td align="center">1</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="overflow-x-auto">
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2" width="40">เลือก</th>
+                        <th rowspan="2">สัปดาห์</th>
+                        <th rowspan="2">ลูกค้า</th>
+                        <th colspan="2">ETD (KKF)</th>
+                        <th colspan="2">การจองขนส่ง</th>
+                        <th rowspan="2">รถบรรทุก</th>
+                    </tr>
+                    <tr>
+                        <th>วัน</th>
+                        <th>วันที่</th>
+                        <th>ตู้คอนเทนเนอร์</th>
+                        <th class="bg-yellow-50">ท่าเรือปลายทาง (ประเทศ)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bg-day-white">
+                        <td align="center"><input type="checkbox" class="w-4 h-4 text-blue-600 rounded"></td>
+                        <td>W2 (6 - 12)</td>
+                        <td>A0201 : SOON HUAT SENG SDN BHD (MY01)</td>
+                        <td align="center">จันทร์</td>
+                        <td align="center">21/01/2025</td>
+                        <td align="center">20'</td>
+                        <td>MY01D : PADANG BESAR, <span class="text-country">MALAYSIA</span></td>
+                        <td align="center">1</td>
+                    </tr>
+                    <tr class="bg-day-blue">
+                        <td align="center"><input type="checkbox" class="w-4 h-4 text-blue-600 rounded"></td>
+                        <td>W4 (20 - 26)</td>
+                        <td>F0614 : FULLY (S) PTE LTD (GH02)</td>
+                        <td align="center">อังคาร</td>
+                        <td align="center">22/01/2025</td>
+                        <td align="center">40'</td>
+                        <td>GH01D : TEMA, <span class="text-country">GHANA</span></td>
+                        <td align="center">2</td>
+                    </tr>
+                    <tr class="bg-day-white">
+                        <td align="center"><input type="checkbox" class="w-4 h-4 text-blue-600 rounded"></td>
+                        <td>W4 (20 - 26)</td>
+                        <td>E0605 : EURO RED VIGO, S.L. (ES01)</td>
+                        <td align="center">พุธ</td>
+                        <td align="center">23/01/2025</td>
+                        <td align="center">20'</td>
+                        <td>ES02D : VIGO, <span class="text-country">SPAIN</span></td>
+                        <td align="center">1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- Section 2: แผนจัดส่งสินค้ารายสัปดาห์ - รอยืนยัน (นำกลับมา) -->
+    <!-- Section 2: แผนจัดส่งสินค้ารายสัปดาห์ - รอยืนยัน -->
     <div class="table-container">
         <div class="section-title">
-            <span class="text-amber-600">● แผนจัดส่งสินค้ารายสัปดาห์ - รอยืนยัน</span>
+            <span class="text-amber-600 flex items-center gap-2">
+                <span class="w-3 h-3 bg-amber-500 rounded-full"></span>
+                แผนจัดส่งสินค้ารายสัปดาห์ - รอยืนยัน
+            </span>
             <div class="flex gap-2">
                 <button class="bg-green-600 text-white btn-action shadow-sm hover:bg-green-700">ยืนยัน</button>
                 <button class="bg-red-500 text-white btn-action shadow-sm hover:bg-red-600">ส่งคืน</button>
             </div>
         </div>
-        <table>
-            <thead>
-                <tr>
-                    <th rowspan="2" width="40">เลือก</th>
-                    <th rowspan="2">สัปดาห์</th>
-                    <th rowspan="2">ลูกค้า</th>
-                    <th colspan="2">ETD (KKF)</th>
-                    <th colspan="2">การจองขนส่ง</th>
-                    <th rowspan="2">รถบรรทุก</th>
-                </tr>
-                <tr>
-                    <th>วัน</th>
-                    <th>วันที่</th>
-                    <th>ตู้คอนเทนเนอร์</th>
-                    <th class="bg-yellow-50">ท่าเรือปลายทาง (ประเทศ)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="bg-day-blue">
-                    <td align="center"><input type="checkbox"></td>
-                    <td>W2 (6 - 12)</td>
-                    <td>A0203 : CHYE KHIANG SENG(M) SDN BHD (MY02)</td>
-                    <td align="center">พฤหัสบดี</td>
-                    <td align="center">24/01/2025</td>
-                    <td align="center">20'</td>
-                    <td>MY02D : PORT KLANG, <span class="text-country">MALAYSIA</span></td>
-                    <td align="center">1</td>
-                </tr>
-                <tr class="bg-day-white">
-                    <td align="center"><input type="checkbox"></td>
-                    <td>W2 (6 - 12)</td>
-                    <td>A4001 : BECAMEX TRADING CO., LTD (VN01)</td>
-                    <td align="center">ศุกร์</td>
-                    <td align="center">25/01/2025</td>
-                    <td align="center">20'</td>
-                    <td>VN01D : HOCHIMINH (CATLAI), <span class="text-country">VIETNAM</span></td>
-                    <td align="center">1</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="overflow-x-auto">
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2" width="40">เลือก</th>
+                        <th rowspan="2">สัปดาห์</th>
+                        <th rowspan="2">ลูกค้า</th>
+                        <th colspan="2">ETD (KKF)</th>
+                        <th colspan="2">การจองขนส่ง</th>
+                        <th rowspan="2">รถบรรทุก</th>
+                    </tr>
+                    <tr>
+                        <th>วัน</th>
+                        <th>วันที่</th>
+                        <th>ตู้คอนเทนเนอร์</th>
+                        <th class="bg-yellow-50">ท่าเรือปลายทาง (ประเทศ)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bg-day-blue">
+                        <td align="center"><input type="checkbox" class="w-4 h-4 text-blue-600 rounded"></td>
+                        <td>W2 (6 - 12)</td>
+                        <td>A0203 : CHYE KHIANG SENG(M) SDN BHD (MY02)</td>
+                        <td align="center">พฤหัสบดี</td>
+                        <td align="center">24/01/2025</td>
+                        <td align="center">20'</td>
+                        <td>MY02D : PORT KLANG, <span class="text-country">MALAYSIA</span></td>
+                        <td align="center">1</td>
+                    </tr>
+                    <tr class="bg-day-white">
+                        <td align="center"><input type="checkbox" class="w-4 h-4 text-blue-600 rounded"></td>
+                        <td>W2 (6 - 12)</td>
+                        <td>A4001 : BECAMEX TRADING CO., LTD (VN01)</td>
+                        <td align="center">ศุกร์</td>
+                        <td align="center">25/01/2025</td>
+                        <td align="center">20'</td>
+                        <td>VN01D : HOCHIMINH (CATLAI), <span class="text-country">VIETNAM</span></td>
+                        <td align="center">1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Legend -->
-    <div class="flex gap-6 mt-4 p-4 bg-white rounded border text-sm">
+    <div class="flex gap-6 mt-4 p-4 bg-white rounded border border-slate-200 text-sm shadow-sm">
         <div class="flex items-center gap-2">
-            <div class="w-4 h-4 border bg-day-white"></div>
-            <span>สำหรับวันจันทร์, พุธ, ศุกร์</span>
+            <div class="w-4 h-4 border border-slate-300 bg-day-white"></div>
+            <span class="text-slate-600">สำหรับวันจันทร์, พุธ, ศุกร์</span>
         </div>
         <div class="flex items-center gap-2">
-            <div class="w-4 h-4 border bg-day-blue"></div>
-            <span>สำหรับวันอังคาร, พฤหัสบดี, เสาร์</span>
+            <div class="w-4 h-4 border border-slate-300 bg-day-blue"></div>
+            <span class="text-slate-600">สำหรับวันอังคาร, พฤหัสบดี, เสาร์</span>
         </div>
     </div>
 </div>
 
+<!-- Footer -->
+<footer>
+    &copy; Meenmin-Atchara 2026 | All rights reserved
+</footer>
+
 <!-- Modal: เพิ่มข้อมูล -->
 <div id="addModal">
-    <div class="modal-content">
-        <div class="bg-sky-500 p-4 text-white flex justify-between items-center rounded-t-8">
-            <h2 class="font-bold">แผนสำหรับส่งออก : เพิ่ม</h2>
-            <button onclick="closeModal()" class="text-2xl">&times;</button>
+    <div class="modal-content animate-in fade-in zoom-in duration-200">
+        <!-- Header -->
+        <div class="bg-sky-500 p-4 text-white flex justify-between items-center rounded-t-12 sticky top-0 z-10 shadow-md">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+                <h2 class="font-bold text-lg">แผนสำหรับส่งออก : เพิ่มข้อมูล</h2>
+            </div>
+            <button onclick="closeModal()" class="text-white hover:text-sky-100 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </button>
         </div>
         
-        <div class="p-6">
-            <!-- ส่วนรายละเอียดการขนส่ง (Main Header) -->
-            <div class="grid grid-cols-2 gap-4 mb-6 pb-4 border-bottom-2">
-                <div class="form-group">
-                    <label class="required">สัปดาห์</label>
-                    <input type="number" placeholder="เช่น 2">
-                </div>
-                <div class="form-group">
-                    <label class="required">ETD (KKF)</label>
-                    <input type="date">
-                </div>
-                <div class="form-group">
-                    <label>วัน</label>
-                    <input type="text" disabled placeholder="คำนวณจากวันที่อัตโนมัติ" class="bg-slate-50">
-                </div>
-                <div class="form-group">
-                    <label class="required">รถบรรทุก</label>
-                    <input type="number" placeholder="จำนวนรถ">
-                </div>
-                <div class="form-group">
-                    <label class="required">ขนส่ง</label>
-                    <select>
-                        <option value="">เลือกตัวเลือก</option>
-                        <option>SCG Logistics</option>
-                        <option>KERRY</option>
-                    </select>
+        <div class="p-8">
+            <!-- ส่วนที่ 1: รายละเอียดการขนส่ง (Main Header) -->
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-8">
+                <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                    </svg>
+                    ส่วนรายละเอียดการขนส่ง
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="form-group">
+                        <label class="required">สัปดาห์</label>
+                        <input type="number" id="weekNo" placeholder="เช่น 2" class="bg-white">
+                    </div>
+                    <div class="form-group">
+                        <label class="required">ETD (KKF)</label>
+                        <input type="date" id="etdDate" onchange="updateDayName(this.value)" class="bg-white">
+                    </div>
+                    <div class="form-group">
+                        <label>วัน</label>
+                        <input type="text" id="dayName" disabled placeholder="อัตโนมัติ" class="bg-slate-100 font-medium">
+                    </div>
+                    <div class="form-group">
+                        <label class="required">จำนวนรถบรรทุก</label>
+                        <input type="number" id="truckCount" placeholder="เช่น 1" class="bg-white">
+                    </div>
+                    <div class="form-group">
+                        <label class="required">บริษัทขนส่ง</label>
+                        <select class="bg-white">
+                            <option value="">เลือกตัวเลือก</option>
+                            <option>SCG Logistics</option>
+                            <option>KERRY</option>
+                            <option>DHL Global Forwarding</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <div class="border-t pt-4">
-                <h3 class="font-bold text-slate-700 mb-4 flex items-center gap-2">
-                    <span class="w-2 h-6 bg-sky-500 inline-block"></span>
-                    รายละเอียดลูกค้า
-                </h3>
+            <!-- ส่วนที่ 2: รายละเอียดลูกค้า -->
+            <div class="border-t pt-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                        <span class="w-2 h-6 bg-sky-500 inline-block rounded-full"></span>
+                        รายละเอียดลูกค้า
+                    </h3>
+                    <span class="text-xs text-slate-500 italic">* สามารถเพิ่มลูกค้าได้หากมีการรวมส่ง</span>
+                </div>
 
                 <!-- รายการลูกค้า (Dynamic) -->
                 <div id="customerList">
-                    <!-- Customer 1 -->
-                    <div class="customer-card">
-                        <div class="flex justify-between mb-2">
-                            <span class="font-bold text-sky-600 text-sm">ลูกค้าที่ 1</span>
+                    <!-- Customer 1 (Main) -->
+                    <div class="customer-card shadow-sm border-blue-100">
+                        <div class="flex justify-between mb-4 border-b border-slate-100 pb-2">
+                            <span class="font-bold text-sky-600 flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                                  <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                </svg>
+                                ลูกค้าที่ 1 (หลัก)
+                            </span>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="form-group col-span-2">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                            <div class="form-group md:col-span-2">
                                 <label class="required">ลูกค้า</label>
-                                <select>
+                                <select class="bg-white">
                                     <option value="">เลือกตัวเลือก</option>
                                     <option>A0201 : SOON HUAT SENG SDN BHD (MY01)</option>
                                     <option>F0614 : FULLY (S) PTE LTD (GH02)</option>
+                                    <option>E0605 : EURO RED VIGO, S.L. (ES01)</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="required">ประเภทการขนส่ง</label>
-                                <select>
+                                <select class="bg-white">
                                     <option value="">เลือกตัวเลือก</option>
                                     <option>ทางเรือ</option>
                                     <option>ทางบก</option>
@@ -306,49 +382,52 @@
                             </div>
                             <div class="form-group">
                                 <label>ตู้คอนเทนเนอร์</label>
-                                <select>
+                                <select class="bg-white">
                                     <option>20' Standard</option>
                                     <option>40' High Cube</option>
-                                    <option>LCL</option>
+                                    <option>LCL (Less than Container Load)</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="required">สถานที่โหลดสินค้า</label>
-                                <select>
+                                <select class="bg-white">
                                     <option>อาคารผ่านหน้าบ้าน สแกนเนอร์</option>
                                     <option>ท่าเรือคลองเตย</option>
+                                    <option>คลังสินค้าหลัก (Main Warehouse)</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="required">ปลายทาง</label>
-                                <select>
+                                <label class="required">ปลายทาง (ท่าเรือ/สนามบิน)</label>
+                                <select class="bg-white">
                                     <option value="">เลือกตัวเลือก</option>
                                     <option>ES02D : VIGO, SPAIN</option>
                                     <option>MY01D : PADANG BESAR, MALAYSIA</option>
-                                    <option>NAVEGANTES, BRAZIL</option>
+                                    <option>GH01D : TEMA, GHANA</option>
+                                    <option>BR01D : NAVEGANTES, BRAZIL</option>
                                 </select>
                             </div>
-                            <div class="form-group col-span-2">
+                            <div class="form-group md:col-span-2">
                                 <label>บันทึกเพิ่มเติม</label>
-                                <textarea rows="2" placeholder="ใส่ข้อความที่นี่..."></textarea>
+                                <textarea rows="2" placeholder="ระบุเงื่อนไขการส่งสินค้า หรือหมายเหตุอื่นๆ..." class="bg-white"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- ปุ่มเพิ่มลูกค้ากรณีรวมส่ง -->
-                <button onclick="addCustomerRow()" class="flex items-center gap-2 text-sky-600 font-bold text-sm hover:underline">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <button type="button" onclick="addCustomerRow()" class="flex items-center gap-2 text-sky-600 font-bold text-sm bg-sky-50 px-4 py-2 rounded-lg hover:bg-sky-100 transition border border-sky-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
                         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
                     </svg>
-                    เพิ่มลูกค้า กรณีรวมส่ง
+                    เพิ่มลูกค้า กรณีรวมส่ง (Consolidated)
                 </button>
             </div>
         </div>
 
-        <div class="p-4 border-t bg-slate-50 flex justify-end gap-2 rounded-b-8">
-            <button onclick="closeModal()" class="px-6 py-2 border rounded-md text-slate-600 hover:bg-slate-100 font-medium">ยกเลิก</button>
-            <button onclick="closeModal()" class="px-6 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 font-medium shadow-sm">บันทึก</button>
+        <!-- Action Footer -->
+        <div class="p-6 border-t bg-slate-50 flex justify-end gap-3 sticky bottom-0">
+            <button onclick="closeModal()" class="px-8 py-2.5 border border-slate-300 rounded-lg text-slate-700 hover:bg-white font-semibold transition">ยกเลิก</button>
+            <button onclick="saveAndClose()" class="px-8 py-2.5 bg-sky-500 text-white rounded-lg hover:bg-sky-600 font-semibold shadow-md transition transform active:scale-95">บันทึกข้อมูล</button>
         </div>
     </div>
 </div>
@@ -358,57 +437,93 @@
 
     function openModal() {
         document.getElementById('addModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // ป้องกันการสกอลล์พื้นหลัง
     }
 
     function closeModal() {
         document.getElementById('addModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function updateDayName(dateString) {
+        if (!dateString) return;
+        const days = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+        const date = new Date(dateString);
+        document.getElementById('dayName').value = days[date.getDay()];
     }
 
     function addCustomerRow() {
         customerCount++;
         const container = document.getElementById('customerList');
         const newCard = document.createElement('div');
-        newCard.className = 'customer-card bg-amber-50 border-amber-200';
+        newCard.className = 'customer-card customer-card-extra animate-in slide-in-from-top-4 duration-300 shadow-sm';
         newCard.innerHTML = `
-            <div class="flex justify-between mb-2">
-                <span class="font-bold text-amber-600 text-sm">ลูกค้าที่ ${customerCount} (เพิ่มเติมกรณีรวมส่ง)</span>
-                <button onclick="this.parentElement.parentElement.remove()" class="text-red-500 text-xs hover:underline">ลบออก</button>
+            <div class="flex justify-between mb-4 border-b border-amber-200 pb-2">
+                <span class="font-bold text-amber-700 flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                    ลูกค้าที่ ${customerCount} (รวมส่ง)
+                </span>
+                <button onclick="removeCustomer(this)" class="text-red-500 text-sm hover:text-red-700 font-medium flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                    </svg>
+                    ลบรายการ
+                </button>
             </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="form-group col-span-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                <div class="form-group md:col-span-2">
                     <label class="required">ลูกค้า</label>
-                    <select><option value="">เลือกตัวเลือก</option><option>ลูกค้ารายอื่น...</option></select>
+                    <select class="bg-white">
+                        <option value="">เลือกตัวเลือก</option>
+                        <option>A4001 : BECAMEX TRADING CO., LTD (VN01)</option>
+                        <option>A0203 : CHYE KHIANG SENG(M) SDN BHD (MY02)</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label class="required">ประเภทการขนส่ง</label>
-                    <select>
+                    <select class="bg-white">
                         <option value="">เลือกตัวเลือก</option>
                         <option>ทางเรือ</option><option>ทางบก</option><option>ทางอากาศ</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>ตู้คอนเทนเนอร์</label>
-                    <select><option>20' Standard</option><option>LCL</option></select>
+                    <select class="bg-white"><option>20' Standard</option><option>LCL</option></select>
                 </div>
                 <div class="form-group">
                     <label class="required">สถานที่โหลดสินค้า</label>
-                    <select><option>อาคารผ่านหน้าบ้าน สแกนเนอร์</option></select>
+                    <select class="bg-white"><option>อาคารผ่านหน้าบ้าน สแกนเนอร์</option></select>
                 </div>
                 <div class="form-group">
                     <label class="required">ปลายทาง</label>
-                    <select>
+                    <select class="bg-white">
                         <option value="">เลือกตัวเลือก</option>
-                        <option>VIGO, SPAIN</option>
+                        <option>VN01D : HOCHIMINH (CATLAI), VIETNAM</option>
+                        <option>MY02D : PORT KLANG, MALAYSIA</option>
                         <option>NAVEGANTES, BRAZIL</option>
                     </select>
                 </div>
-                <div class="form-group col-span-2">
+                <div class="form-group md:col-span-2">
                     <label>บันทึกเพิ่มเติม</label>
-                    <textarea rows="2"></textarea>
+                    <textarea rows="2" class="bg-white"></textarea>
                 </div>
             </div>
         `;
         container.appendChild(newCard);
+        newCard.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    function removeCustomer(btn) {
+        btn.closest('.customer-card').remove();
+    }
+
+    function saveAndClose() {
+        // จำลองการบันทึก
+        console.log("Saving data...");
+        closeModal();
     }
 
     // ปิด Modal เมื่อคลิกด้านนอก
